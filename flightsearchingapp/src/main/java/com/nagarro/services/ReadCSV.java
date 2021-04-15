@@ -1,4 +1,4 @@
-package com.nagarro.csvreader;
+package com.nagarro.services;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,13 +12,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.nagarro.HibernateUtil;
+import com.nagarro.constant.Constants;
+import com.nagarro.model.CSVData;
 
-public class ReadCSVThread extends Thread {
-	private static final String srcDir = "src/main/resources";
-	private static ArrayList<String> listOfFile = new ArrayList<String>();
+public class ReadCSV extends Thread {
+	private static final String srcDir = Constants.SOURCE_DIR;
+	private static List<String> listOfFile = new ArrayList<String>();
 
-	static public ArrayList<String> getAllFiles() {
+	static public List<String> getAllFiles() {
 		try {
 			File folder = new File(srcDir);
 			for (File file : folder.listFiles()) {
@@ -36,25 +37,26 @@ public class ReadCSVThread extends Thread {
 	static List<String> csvData = new ArrayList<String>();
 	static List<String> arr;
 
-	static public List<String> readCSV() {
+	public static List<String> readCSV() {
 		if (listOfFile.size() > 0) {
+
 			for (int i = 0; i < listOfFile.size(); i++) {
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(srcDir + "/" + listOfFile.get(i)));
 
-					String str_line = "";
+					String strLine = "";
 					br.readLine();
-					while ((str_line = br.readLine()) != null) {
+					while ((strLine = br.readLine()) != null) {
 
-						if (!csvData.contains(str_line)) {
-							StringTokenizer token = new StringTokenizer(str_line, "|");
-							arr = new ArrayList(str_line.length());
+						if (!csvData.contains(strLine)) {
+
+							StringTokenizer token = new StringTokenizer(strLine, "|");
+							arr = new ArrayList(strLine.length());
 							while (token.hasMoreTokens()) {
 								arr.add(token.nextToken());
 							}
 							Object[] objArr = arr.toArray();
 
-							// convert Object array to String array
 							String[] str = Arrays.copyOf(objArr, objArr.length, String[].class);
 
 							CSVData row = new CSVData();
@@ -63,7 +65,8 @@ public class ReadCSVThread extends Thread {
 							row.setArrLoc(str[2]);
 							row.setValidTill(str[3]);
 							row.setFlightTime(Integer.parseInt(str[4]));
-							row.setFlightDur(Double.parseDouble(str[5]));
+
+							row.setFlightDur(Float.parseFloat(str[5]));
 							row.setFare(Integer.parseInt(str[6]));
 							row.setSeatAvailable(str[7]);
 							row.setClassAvailable(str[8]);
@@ -76,7 +79,7 @@ public class ReadCSVThread extends Thread {
 							session.save(row);
 							tnx.commit();
 
-							csvData.add(str_line);
+							csvData.add(strLine);
 						}
 					}
 				} catch (Exception e) {
@@ -94,14 +97,14 @@ public class ReadCSVThread extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
-			getAllFiles();
-			readCSV();
+		 while (true) {
+		getAllFiles();
+		readCSV();
 			try {
-				Thread.sleep(10000);// sleep for 10 second
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
 	}
+}
 }

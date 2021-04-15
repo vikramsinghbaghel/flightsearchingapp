@@ -1,11 +1,11 @@
-package com.nagarro;
+package com.nagarro.services;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import com.nagarro.csvreader.CSVData;
+import com.nagarro.model.CSVData;
 
 public class HibernateUtil {
 	private static SessionFactory sessionFactory;

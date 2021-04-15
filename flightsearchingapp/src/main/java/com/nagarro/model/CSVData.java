@@ -1,4 +1,4 @@
-package com.nagarro.csvreader;
+package com.nagarro.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,20 +8,39 @@ import javax.persistence.Id;
 public class CSVData {
 	@Id
 	@GeneratedValue
-	int serialNo;
+	private int serialNo;
 
-	String flightNo;
-	String deptLoc;
-	String arrLoc;
-	String validTill;
-	int flightTime;
-	double flightDur;
-	int fare;
-	String seatAvailable;
-	String classAvailable;
+	private String flightNo;
+	private String deptLoc;
+	private String arrLoc;
+	private String validTill;
+	private int flightTime;
+	private float flightDur;
+	private int fare;
+	private String seatAvailable;
+	private String classAvailable;
+
+	public CSVData(String flightNo, String deptLoc, String arrLoc, String validTill, int fare, String classAvailable,
+			float flightDur) {
+		super();
+		this.flightNo = flightNo;
+		this.deptLoc = deptLoc;
+		this.arrLoc = arrLoc;
+		this.validTill = validTill;
+
+		this.flightDur = flightDur;
+		this.fare = fare;
+		this.classAvailable = classAvailable;
+
+	}
 
 	public int getSerialNo() {
 		return serialNo;
+	}
+
+	public CSVData() {
+		super();
+
 	}
 
 	public void setSerialNo(int serialNo) {
@@ -68,11 +87,11 @@ public class CSVData {
 		this.flightTime = flightTime;
 	}
 
-	public double getFlightDur() {
+	public float getFlightDur() {
 		return flightDur;
 	}
 
-	public void setFlightDur(double flightDur) {
+	public void setFlightDur(float flightDur) {
 		this.flightDur = flightDur;
 	}
 
